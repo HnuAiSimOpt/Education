@@ -1,58 +1,70 @@
+/*è®¸å°‘è¾‰ 
+è½¦è¾†2003ç­
+202004061301 
+2023.03.06
+é€šè¿‡å…¬å¼ç›´æ¥æ±‚å›å½’æ–¹ç¨‹ï¼Œåœ¨è¯¥ä»£ç ä¸‹é¢æœ‰é€šè¿‡æ¢¯åº¦ä¸‹é™æ¥æ±‚æŸå¤±å‡½æ•°çš„æœ€å°å€¼çš„å¦ä¸€ç«¯ä»£ç ï¼Œä½†ä»£ç æ‹Ÿåˆè¯¯å·®å¤ªå¤§ä¸”æœªæ‰¾åˆ°åŸå› ï¼Œ
+æˆ‘ç”¨matlabç”¨åŒæ ·çš„æ–¹æ³•å†™äº†ä¸€éï¼Œå¥‡æ€ªçš„æ˜¯ç”¨matlabç”¨åŒæ ·çš„ç®—æ³•å†™çš„å°±èƒ½å¾ˆå¥½çš„æ‹Ÿåˆï¼ŒåŒæ—¶æäº¤äº†matlabçš„æ–‡ä»¶æœ›è€å¸ˆèƒ½å¤ŸæŒ‡å‡ºä»£ç é”™è¯¯ 
+
+
+*/ 
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#define N 5/* å®šä¹‰æ•°æ®ç‚¹æ•° */
+double X[N] = {1, 2, 3, 4, 5};/* å®šä¹‰Xå’ŒYæ•°ç»„ï¼Œå­˜å‚¨æ•°æ®ç‚¹ */
+double Y[N] = {1.2, 2.5, 3.6, 4.8, 6.1};
+int main()
+{
+    double sum_x = 0, sum_y = 0; /* Xå’ŒYçš„å’Œ */
+    double sum_xy = 0, sum_x2 = 0; /* XYå’ŒX^2çš„å’Œ */
+    double a, b; /* æ‹Ÿåˆç›´çº¿çš„ç³»æ•° */
+    for (int i = 0; i < N; i++)/* è®¡ç®—Xã€Yã€XYã€X^2çš„å’Œ */
+    {
+        sum_x += X[i];
+        sum_y += Y[i];
+        sum_xy += X[i] * Y[i];
+        sum_x2 += X[i] * X[i];
+    }
+    b = (N * sum_xy - sum_x * sum_y) / (N * sum_x2 - pow(sum_x, 2));/* è®¡ç®—æ‹Ÿåˆç›´çº¿çš„ç³»æ•° */
+    a = (sum_y - b * sum_x) / N;
+	printf("æ‹Ÿåˆç›´çº¿æ–¹ç¨‹ä¸º: y = %.2fx + %.2f", b, a);
+    return 0;
+}
 /*
-ĞíÉÙ»Ô 202004061301 ³µÁ¾2003°à
-×îĞ¡¶ş³Ë·¨À´¼ÆËãÏßĞÔÄâºÏ 
-
-
-
-
-*/
 #include <iostream>
 #include <stdio.h>
 #include<math.h>
-#define v 0.00001   /*ÉèÖÃÏÂÉ½²½³¤ */
+#define v 0.000001   //è®¾ç½®ä¸‹å±±æ­¥é•¿ 
 int main()
 {
     using namespace std;
     int i,j,k,m;
     int col;
     int number;
-    int sum_x = 0;
-    int sum_y = 0;
-    int  x[100];         /*Êı¾İÑù±¾*/
-    int  y[100];
-    double theta1;       /* Ò»´ÎÏîµÄÏµÊı*/
-    double theta0;       /* ³£ÏµÊı */
-    double e;            /*Îó²îÏµÊı*/
+    double sum_x = 0;
+    double sum_y = 0;
+    double  x[100];         //æ•°æ®æ ·æœ¬
+    double  y[100];
+    double theta1;       //ä¸€æ¬¡é¡¹çš„ç³»æ•°
+    double theta0;       //å¸¸ç³»æ•° 
+    double e;            //è¯¯å·®ç³»æ•°
     double old_theta1;
     double old_theta0;
-    printf("please input sample's number :"); /*ÊäÈëÑù±¾µÄ¸öÊı*/
+    printf("please input sample's number :"); //è¾“å…¥æ ·æœ¬çš„ä¸ªæ•°
     cin>>number;
     printf("sample's number is %d\n\n",number);
-    printf("please input sample'x :");       /*Ñù±¾µÄÊäÈëx*/
+    printf("please input sample'x :");       //æ ·æœ¬çš„è¾“å…¥x
     for(k=0;k<number;k++)
     {
         cin>>x[k];
     }
     printf("\n");
-    printf("please input sample'y :");      /*ÊäÈëµÄÑù±¾y*/
+    printf("please input sample'y :");      //è¾“å…¥çš„æ ·æœ¬y
     for(m=0;m<number;m++)
     {
         cin>>y[m];
     }
     printf("\n");
-    k=0;
-    m=0;
-    printf("x[]= ");                /*Êä³öÑù±¾µã*/ 
-    for(k=0;k<number;k++)
-    {
-        printf("%3d",x[k]);
-    }
-    printf("\n\n");
-    printf("y[] = ");
-    for(m=0;m<number;m++)
-    {
-       printf("%3d",y[m]);
-    }
     col = number;
     printf("\n\n");
     printf("the training sample is : %d \n",col);
@@ -61,30 +73,33 @@ int main()
         sum_x = sum_x + x[i];
         sum_y = sum_y + y[i];
     }
-    theta1 = (double)sum_y/sum_x;/*ÉèÖÃÏÂÉ½µÄ³õÊ¼µã*/
-    theta0 = y[0]-theta1*x[0];
-    while(1)                     /*Å£¶Ù¿ªÊ¼ÏÂÉ½£¬Ö±µ½ÕÒµ½×îÓÅ½âÍË³öÑ­»·*/
+    theta1 = (double)sum_y/sum_x;//è®¾ç½®ä¸‹å±±çš„åˆå§‹ç‚¹
+    theta0 = y[3]-theta1*x[3];
+    while(1)                     //æ¢¯åº¦ä¸‹é™ï¼Œç›´åˆ°æ‰¾åˆ°æœ€ä¼˜è§£é€€å‡ºå¾ªç¯
     {
        double temp1 = 0;
        double temp0 = 0;
-       for(j=0;j<col-1;j++)/*¼ÆËãËğÊ§º¯Êı·Ö±ğ¶Ô³£ÏµÊıºÍÒ»´ÎÏîÏµÊıµÄµ¼Êı*/
+       for(j=0;j<col-1;j++)//è®¡ç®—æŸå¤±å‡½æ•°åˆ†åˆ«å¯¹å¸¸ç³»æ•°å’Œä¸€æ¬¡é¡¹ç³»æ•°çš„å¯¼æ•°
        {
-          temp1 = temp1 + (y[j]-(theta0 + theta1*x[j]))*x[j];
-          temp0 = temp0 + (y[j]-(theta0 + theta1*x[j]))*1;
+          temp1 = temp1 + ((theta0 + theta1*x[j])-y[j])*x[j];
+          temp0 = temp0 + ((theta0 + theta1*x[j])-y[j])*1;
        }
 	   temp1 = temp1 / col;
        temp0 = temp0 / col;
-       old_theta1 = theta1;/*½«Ç°Ò»¸ö³£ÏµÊıºÍÒ»´ÎÏîÏµÊı´æ´¢ÒÔºóĞø±È½Ï*/
+       old_theta1 = theta1;//å°†å‰ä¸€ä¸ªå¸¸ç³»æ•°å’Œä¸€æ¬¡é¡¹ç³»æ•°å­˜å‚¨ä»¥åç»­æ¯”è¾ƒ
        old_theta0 = theta0;
 
-       theta1 = theta1 - v*temp1;/*¸üĞÂÃ¿¸öÑù±¾µÄ³£ÏµÊıºÍÒ»´ÎÏîÏµÊı*/
+       theta1 = theta1 - v*temp1;//æ›´æ–°æ¯ä¸ªæ ·æœ¬çš„å¸¸ç³»æ•°å’Œä¸€æ¬¡é¡¹ç³»æ•°
        theta0 = theta0 - v*temp0;
+       temp1 = 0;
+       temp0 = 0;
        e = (pow((old_theta1-theta1),2) + pow((old_theta0 - theta0),2));
-        if(e<0.000003);/*ÉèÖÃÏÂ½µËÙ¶ÈµÄÒ»¸öãĞÖµ*/ 
+        if(e<0.000003);//è®¾ç½®ä¸‹é™é€Ÿåº¦çš„ä¸€ä¸ªé˜ˆå€¼
         {
             printf("the objective function is : \n");
             printf("f(x)= %f + %f*x",theta0,theta1);
-            break;/*Ìø³öÑ­»·*/
+            break;//è·³å‡ºå¾ªç¯
         }
     }
 }
+*/
