@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <math.h>
 #define N 5/* 定义数据点数 */
-double X[N] = {1, 2, 3, 4, 5};/* 定义X和Y数组，存储数据点 */
+ouble X[N] = {1, 2, 3, 4, 5};/* 定义X和Y数组，存储数据点 */
 double Y[N] = {1.2, 2.5, 3.6, 4.8, 6.1};
 int main()
 {
