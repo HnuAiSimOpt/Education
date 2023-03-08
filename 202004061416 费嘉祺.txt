@@ -1,0 +1,92 @@
+//车辆2003班 费嘉祺
+//学号202004061416  随机数控制在0~99  拟合
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+//定义一个结构体来存储样本数据
+struct sample {
+    double x; //自变量
+    double y; //因变量
+};
+
+int main() {
+    srand((unsigned)time(NULL)); //生成随机数种子
+    int n = 100; //样本数量
+    struct sample data[n]; //定义一个数组来存储样本数据
+    //使用循环来生成随机数，并赋值给样本数据
+    for(int i = 0; i < n; i++) {
+        data[i].x = rand() % 100; //生成0到99之间的随机数
+        data[i].y = rand() % 100; //生成0到99之间的随机数
+    }
+    //打印样本数据
+    for(int i = 0; i < n; i++) {
+        printf("Sample %d: x = %.2f, y = %.2f\n", i + 1, data[i].x, data[i].y);
+    }
+    return 0;
+}
+
+#define MAX 99 //最多输入99个点进行线性拟和
+typedef struct POINT//点的结构
+{
+    double x;
+    double y;
+}Point;
+int main()
+{
+    int m;//输入点的个数
+    int i;
+    Point points[MAX];//用来存储点
+    static double u11,u12,u21,u22,c1,c2;//用来构建法方程组的变量
+    double a,b,tmp;
+    double r,sse;//相关系数和均方误差
+    printf("\n请输入点数：");
+    if(scanf("%d",&m)!=1 || m<=0 || m>MAX)//检查输入的点数是否合法
+    {
+        printf("输入错误，请输入一个正整数，且不超过%d\n",MAX);
+        return 1;
+    }
+    printf("\n请输入x点y点的坐标：\n");
+    for(i=0;i<m;i++)
+    {
+        if(scanf("%lf%lf",&points[i].x,&points[i].y)!=2)//检查输入的坐标是否合法
+        {
+            printf("输入错误，请输入两个数字\n");
+            return 1;
+        }
+    }
+    //列出方程U(a,b) for(i=0;i<m;i++)//即解法方程组
+    {
+        u21+=points[i].x;
+        u22+=points[i].x*points[i].x;
+        c1+=points[i].y;
+        c2+=points[i].x*points[i].y;
+    }
+    u12=u21;
+    u11=m;
+    //进行求解
+    tmp=u11*u22-u12*u21;//判断法方程组是否有唯一解
+    if(tmp==0)
+    {
+        printf("无法进行线性拟合，法方程组无解或多解\n");
+        return 1;
+    }
+    a=(c1*u22-c2*u12)/tmp;
+    b=(c1*u21-c2*u11)/tmp;
+    //输出最小二乘解的线性方程
+    printf("\n最小二乘解的线性方程为 :S(x)=%f+%fx\n",a,b);
+    //评估拟合的效果
+    r=0;
+    sse=0;
+    for(i=0;i<m;i++)//计算相关系数和均方误差
+    {
+        r+=(points[i].x-u21/m)*(points[i].y-c1/m);
+        sse+=(points[i].y-a-b*points[i].x)*(points[i].y-a-b*points[i].x);
+    }
+    r=r/sqrt((u22-u21*u21/m)*(c2-c1*c1/m));
+    sse=sse/m;
+    printf("\n相关系数为：%f\n",r);
+    printf("\n均方误差为：%f\n",sse);
+    return 0;
+}
