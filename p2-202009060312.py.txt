@@ -1,0 +1,68 @@
+# -*- coding: utf-8 -*-
+import numpy as np
+from matplotlib import pyplot as plt
+from numpy.linalg import solve
+
+#第一步，随机产生样本数据，并计算均方偏差数
+X = np.linspace(0,10,num = 25).reshape(-1,1)
+a0=np.random.uniform(1,5)
+b0=np.random.uniform(1,5)
+c0=np.random.uniform(1,5)
+e1=np.random.normal(0,20,20)
+Y =(a0)*(X)**2+(b0)*X+(c0)
+print(Y)
+
+# 显示随机坐标点
+plt.scatter(X,Y)
+
+
+
+# 构建并求解拟合曲线系数方程组系数
+a1=0
+for i1 in range(len(X)):
+      a1=a1+2*(X[[i1]])**4
+b1 = 0
+for i2 in range(len(X)):
+    b1 = b1 + 2*(X[[i2]])**3
+c1=0
+for i3 in range(len(X)):
+    c1 =  c1 + 2*(X[[i3]])**2
+d1=0
+for i4 in range(len(X)):
+    d1 = d1 + 2*(X[[i4]])
+a2=0
+for i5 in range(len(X)):
+    a2 =  a2+2*Y[[i5]]*X[[i5]]**2
+b2=0
+for i6 in range(len(X)):
+    b2 =  b2+2*Y[[i6]]*X[[i6]]
+c2=0
+for i7 in range(len(X)):
+    c2  =  c2+2*Y[[i7]]
+d2=0
+for i8 in range(len(X)):
+    d2 =  d2+np.array([[2]])
+
+
+#求解方程得到a0,b0,c0
+a3 = np.mat([[float(a1),float(b1),float(c1)],[float(b1),float(c1),float(d1)],[float(c1),float(d1),float(d2)]])  #系数矩阵
+b3 = np.mat([float(a2),float(b2),float(c2)]).T      #常数项列矩阵
+x = solve(a3,b3)       #对方程组求解
+print("a0: ",x[0])
+print("b0: ",x[1])
+print("c0: ",x[2])
+
+
+#求得拟合曲线方程
+y=x[0]*X**2+x[1]*X+x[2]        #得到拟合函数
+plt.plot(X,y,color = 'green')   #作拟合函数图
+  
+# 利用上述样本数据，求均方偏差MSE
+SE = 0
+for l in range(len(X)):
+    SE = SE + (Y[[l]]-y[[l]])**2
+    
+RMSE = (float(SE)/(len(X)))**(0.5)
+
+print("误差量SE=",SE)
+print("       RMSE=",RMSE)
