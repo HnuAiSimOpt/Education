@@ -1,0 +1,16 @@
+//梯形法求5+x^2在区间(a,b)上的积分
+#include <stdio.h>
+int main()
+{
+    double a,b;//积分区间a、b是输入的double型变量
+    scanf("%lf%lf",&a,&b);
+    double n=10000000;//n是为了控制精度而设置的常数
+    double dx=(b-a)/n;//积分区间内x均分为n份，即dx
+    double S=0;
+    for (int i=1; i<=n; i++)
+    {
+        S=S+dx/(5+(a+i*dx)*(a+i*dx));//累加求积分
+    }
+    printf("%lf\n",S);
+    return 0;
+}
