@@ -2,7 +2,7 @@ import numpy as np
 
 
 def element_triangle(E, miu, t, node_ele, ele_node, solve):
-    # 用行列式计算个常量
+    # 用行列式计算常量
     arr = np.concatenate((np.array([[1], [1], [1]]), node_ele[ele_node, ...]), axis=1)
     # print(arr)
     b1 = -np.linalg.det(arr[[1, 2]][..., [0, 2]])
