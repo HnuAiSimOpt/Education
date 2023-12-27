@@ -1,23 +1,30 @@
 %学号：S230200190，姓名：杜元杰
-%平面三角形单元程序
-%6、8节点固定，1节点收到向下的力，大小为1，均使用国际单位制
+%三角形单元程序求悬臂梁应力应变
+%厚度h = 0.1m，长度lx = 0.5m，ly = 0.1m，杨氏模量E = 200GPa，泊松比P = 0.3
+%1、27、53、105、131节点固定，节点156收到向下的力，大小为1000N
 clear all;
 clc;
-elements_num = 10;%单元个数
+lx = 25;%x方向单元个数
+ly = 5;%y方向单元个数
+elements_num = 2 * lx * ly;%单元个数
+nodes_num = (lx + 1) * (ly + 1);%节点个数
 elements = [];%每行为单元包含节点的序号
-x_length = 5;
-y_length = 1;
-it = elements_num / 2;%循环次数
-for i=1:2:(it*2)-1
-    a = [i, i+1, i+3];
-    b = [i, i+2, i+3];
-    elements = [elements; a; b];
+x_length = 0.5;
+y_length = 0.1;
+
+for j = 1 : ly
+    for i = 1 : lx
+        elements = [elements; i + (j - 1) * (lx + 1),   i + 1 + (j - 1) * (lx + 1), i + (j) * (lx + 1)];
+        elements = [elements; i + 1 + (j - 1) * (lx + 1), i + 1 + (j) * (lx + 1), i + (j) * (lx + 1)];
+    end
 end
 x_nodes = [];%节点x坐标
 y_nodes = [];%节点y坐标
-for i=1:it + 1
-    x_nodes = [x_nodes; (i - 1) / it * x_length; (i - 1) / it * x_length]; 
-    y_nodes = [y_nodes; 0; -y_length];
+for j = 1 : ly + 1
+    for i = 1 : lx + 1
+    x_nodes = [x_nodes; (i - 1) * x_length / lx]; 
+    y_nodes = [y_nodes; (j - 1) * y_length / ly];
+    end
 end
 
 %绘图
@@ -36,12 +43,15 @@ for i = 1 : elements_num
          line([x1,x3],[y1,y3]);
          line([x2,x3],[y2,y3]);
 end
-for i = 1 : 12
-    text(x_nodes(i), y_nodes(i) + 0.1, num2str(i));
+for i = 1 : nodes_num
+    text(x_nodes(i), y_nodes(i), num2str(i));
 end
 
 %6,8节点固定
-bcnode = [6; 8];%边界条件的节点序号
+bcnode = zeros(ly + 1, 1);%边界条件的节点序号
+for i = 1 : ly + 1;
+    bcnode(i) = (i - 1) * (lx + 1) + 1;
+end
 bcdof = [];%边界点自由度序号
 bcval = [];%边界点自由度的值
 for i = 1: length(bcnode)
@@ -61,13 +71,13 @@ strain = zeros(elements_num,3);%应变矩阵
 index = sparse(elementdof,1);%单元刚度矩阵自由度序号索引
 B = sparse(3,elementdof);% 应变矩阵节点位移->单元应变		
 D = sparse(3,3);%本构矩阵/弹性矩阵 应变->应力
-p = 0;%泊松比
-E = 1;%杨氏模量
+p = 0.3;%泊松比
+E = 200e9;%杨氏模量
 D = [ 1 p 0;
       p 1 0;
       0 0 (1 - p) / 2];
 D = D * E / (1 - p^2);%弹性矩阵
-h = 1;
+h = 0.1;
 
 %计算每个单元的刚度矩阵并组装
 for i = 1 : elements_num 
@@ -113,8 +123,8 @@ for i = 1 : length(bcdof)
     f_system(c) = bcval(i);
 end
 
-%f向量，节点1向下的力，大小为1
-f_system(1) = -1;
+%f向量，节点1向下的力，大小为1000N
+f_system(nodes_num) = -1000;
 
 %位移矩阵，K d = f
 [L U]=lu(k_system);% K = L U 
@@ -164,9 +174,9 @@ for i = 1 : elements_num
 end
 
 %重合的节点应力和应变取平均值
-stress_averaged = zeros(12,3);
-strain_averaged = zeros(12,3);
-count = zeros(12,1);%重复次数
+stress_averaged = zeros(nodes_num,3);
+strain_averaged = zeros(nodes_num,3);
+count = zeros(nodes_num,1);%重复次数
 %遍历每个单元，取出单元内节点应力、应变
 for i = 1 : elements_num
     for j = 1 : 3
@@ -177,11 +187,11 @@ for i = 1 : elements_num
     end
 end
 %取均值
-for i = 1 : 12
+for i = 1 : nodes_num
     stress_averaged(i,:) = stress_averaged(i,:) / count(i);
     strain_averaged(i,:) = strain_averaged(i,:) / count(i);
 end
-for i = 1 : 12
+for i = 1 : nodes_num
     fprintf("第 %d 个节点应力：\n σxx = %f，σyy = %f, σxy = %f\n", i, stress_averaged(i, 1), stress_averaged(i, 2), stress_averaged(i, 3));
 end
 
@@ -191,12 +201,12 @@ fid_out=fopen('beam01.plt','w');
 fprintf(fid_out,'TITLE="test case governed by poisson equation"\n');
 fprintf(fid_out,'VARIABLES="x" "y" "u" "v" "sigmax"  "sigmay" "sigmaxy"\n');
 % ET=TRIANGLE，三角形单元
-fprintf(fid_out,'ZONE T="flow-field", N= %8d,E=%8d,ET=TRIANGLE, F=FEPOINT\n',12,10);
+fprintf(fid_out,'ZONE T="flow-field", N= %8d,E=%8d,ET=TRIANGLE, F=FEPOINT\n',nodes_num,elements_num);
 d_system = full(d_system);
-for i=1:12
+for i=1:nodes_num
        fprintf(fid_out,'%16.6e%16.6e%16.6e%16.6e%16.6e%16.6e%16.6e\n',x_nodes(i),y_nodes(i), d_system(2*i-1),d_system(2*i),stress_averaged(i,1),stress_averaged(i,2),stress_averaged(i,3));
 end
-for i=1:10
+for i=1:elements_num
       fprintf(fid_out,'%8d%8d%8d\n',elements(i,1),elements(i,2),elements(i,3));
 end
 
