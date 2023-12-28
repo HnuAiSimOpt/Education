@@ -6,7 +6,6 @@ clear;
 %一块平板，长为4m，宽为3m，厚度为0.025m，弹性模量为21MPa，泊松比为0.3，
 %采用平面线性三角形单元进行应力应变计算。
 
-
 %节点位置信息
 node=[1 0 0 0;
       2 1 0 0;
@@ -61,6 +60,10 @@ E=2.1e7;
 t=0.025;
 miu=0.3; 
 
+
+
+
+
 n_ele=length(ele(:,1));
 
 
@@ -114,4 +117,74 @@ for i=1:n_ele
     patch(node(ele(i,2:4),2),node(ele(i,2:4),3),'w','FaceColor','none','LineStyle','-','EdgeColor','b');
     hold on;
     patch(x1(ele(i,2:4)),y1(ele(i,2:4)),'w','FaceColor','none','EdgeColor','r');
+end
+
+function str=TriangleElementStress(E,miu,node_ele,u1,p)
+
+x1=node_ele(1,1);                
+y1=node_ele(1,2);
+x2=node_ele(2,1);                
+y2=node_ele(2,2);
+x3=node_ele(3,1);                
+y3=node_ele(3,2);
+
+A=(x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))/2;  %单元面积
+
+b1=y2-y3;
+b2=y3-y1;
+b3=y1-y2;
+c1=x3-x2;
+c2=x1-x3;
+c3=x2-x1;
+B=1/2/A*[b1 0 b2 0 b3 0;
+         0 c1 0 c2 0 c3;
+         c1 b1 c2 b2 c3 b3];
+if p==1
+    D=E/(1-miu^2)*[1 miu 0;
+                   miu 1 0;
+                   0 0 (1-miu)/2];          
+elseif p==2
+    D=E/(1+miu)/(1-2*miu)*[1-miu miu 0;
+                           miu 1-miu 0;
+                       0 0 (1-2*miu)/2];    
+end
+str=D*B*u1;  %单元应力
+end
+
+function k_t=assemTriangle(k_t,k_ele,node1,node2,node3)
+
+d(1:2)=2*node1-1:2*node1;
+d(3:4)=2*node2-1:2*node2;
+d(5:6)=2*node3-1:2*node3;
+for ii=1:6
+    for jj=1:6
+        k_t(d(ii),d(jj))=k_t(d(ii),d(jj))+k_ele(ii,jj);
+    end
+end
+end
+
+function k_ele=TriangleElementStiffness(E,miu,t,node_ele)
+
+x1=node_ele(1,1);                
+y1=node_ele(1,2);
+x2=node_ele(2,1);                
+y2=node_ele(2,2);
+x3=node_ele(3,1);                
+y3=node_ele(3,2);
+
+A=(x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))/2;   
+
+b1=y2-y3;
+b2=y3-y1;
+b3=y1-y2;
+c1=x3-x2;
+c2=x1-x3;
+c3=x2-x1;
+B=1/2/A*[b1 0 b2 0 b3 0;
+         0 c1 0 c2 0 c3;
+         c1 b1 c2 b2 c3 b3];
+D=E/(1-miu^2)*[1 miu 0;
+               miu 1 0;
+               0 0 (1-miu)/2];     
+k_ele=t*A*B'*D*B;    
 end
