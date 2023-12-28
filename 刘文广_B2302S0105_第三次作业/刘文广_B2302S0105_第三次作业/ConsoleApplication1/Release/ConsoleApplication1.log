@@ -1,0 +1,27 @@
+﻿  basicObj.cpp
+  Domain.cpp
+  DoubleArray.cpp
+F:\1\ConsoleApplication1\DoubleArray.cpp(132,20): warning C4018: “<”: 有符号/无符号不匹配
+F:\1\ConsoleApplication1\DoubleArray.cpp(560,21): warning C4018: “<=”: 有符号/无符号不匹配
+F:\1\ConsoleApplication1\DoubleArray.cpp(570,20): warning C4018: “<=”: 有符号/无符号不匹配
+F:\1\ConsoleApplication1\DoubleArray.cpp(590,20): warning C4018: “<=”: 有符号/无符号不匹配
+F:\1\ConsoleApplication1\DoubleArray.cpp(599,20): warning C4018: “<=”: 有符号/无符号不匹配
+  DoubleMatrix.cpp
+  Element.cpp
+  InfoOut.cpp
+  IntArray.cpp
+F:\1\ConsoleApplication1\IntArray.cpp(50,20): warning C4018: “<=”: 有符号/无符号不匹配
+F:\1\ConsoleApplication1\IntArray.cpp(78,20): warning C4018: “<”: 有符号/无符号不匹配
+F:\1\ConsoleApplication1\IntArray.cpp(141,20): warning C4018: “<=”: 有符号/无符号不匹配
+  LinearStatic.cpp
+  main.cpp
+F:\1\ConsoleApplication1\main.cpp(438,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Material.cpp
+  mathfem.cpp
+  Node.cpp
+  Section.cpp
+  正在生成代码
+  Previous IPDB not found, fall back to full compilation.
+  All 414 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  已完成代码的生成
+  ConsoleApplication1.vcxproj -> F:\1\Release\ConsoleApplication1.exe
