@@ -1,4 +1,0 @@
-﻿  main.cpp
-F:\刘文广_B2302S0105_第三次作业\ConsoleApplication1\Domain.h(14,37): warning C4267: “return”: 从“size_t”转换到“int”，可能丢失数据
-F:\刘文广_B2302S0105_第三次作业\ConsoleApplication1\main.cpp(432,14): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  ConsoleApplication1.vcxproj -> F:\刘文广_B2302S0105_第三次作业\x64\Debug\ConsoleApplication1.exe
