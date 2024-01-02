@@ -1,0 +1,176 @@
+clear;
+clc;
+%% 参数定义
+% 此程序假定了一块矩形薄板，长0.5米，宽0.025米，高0.25米；
+% 薄板左边固定，右边承受了均匀分布的拉力3000kN/m,即3Mpa的应力
+% 四节点坐标逆时针排列
+% (x1,y1)=(0,0)       (x2,y2)=(0.5,0)  
+% (x3,y3)=(0.5,0.25)  (x4,y4)=(0,0.25)
+% 运行后结果: 四节点的受力为变量F，四节点的位移为变量U，
+% 单元1和2的应力为sigma1和sigma2,应变为epsilon1和epsilon2 
+E=210e6;  %弹性模量
+NU=0.3;   %泊松比
+t=0.025;  %薄板厚度
+
+
+%% 计算求解
+%计算第一个单元刚度矩阵（1,3,4）节点
+k1=Linear_Triangle_Element_Stiffness(E,NU,t,0,0,0.5,0.25,0,0.25,1);
+%计算第二个单元刚度矩阵（1,2,3）节点
+k2=Linear_Triangle_Element_Stiffness(E,NU,t,0,0,0.5,0,0.5, 0.25,1);
+%生成总体刚度矩阵
+K=zeros(8,8);
+K=Linear_Triangle_Assemble(K,k1,1,3,4);
+K=Linear_Triangle_Assemble(K,k2,1,2,3);
+%求出节点位移和受力
+k=K(3:6, 3:6);
+f=[9.375;0;9.375;0];
+u=k\f;
+U=[0;0;u;0;0];
+F=K*U;
+%求解单元应力
+u1=[U(1);U(2);U(5);U(6);U(7);U(8)];
+u2=[U(1);U(2);U(3);U(4);U(5);U(6)];
+sigma1=Linear_Triangle_Element_Stresses(E,NU,0,0,0.5,0.25,0,0.25,1,u1);
+epsilon1=Linear_Triangle_Element_Stresses(E,NU,0,0,0.5,0.25,0,0.25,2,u1);
+ 
+sigma2=Linear_Triangle_Element_Stresses(E,NU,0,0,0.5,0,0.5,0.25,1,u2);
+epsilon2=Linear_Triangle_Element_Stresses(E,NU,0,0,0.5,0,0.5,0.25,2,u2);
+
+s1=Linear_Triangle_Element_PStresses(sigma1);
+s2=Linear_Triangle_Element_PStresses(sigma2);
+ 
+
+%% 函数定义
+% y1 计算三角形单元面积
+% y2 输出单元刚度矩阵k
+% y3 计算所有单元合并后整体刚度矩阵K
+% y4 返回单元应力矢量
+% y5 返回单元主应力
+
+
+function y1 = Linear_Triangle_Element_Area(xi,yi,xj,yj,xm,ym)
+
+% 函数返回三角形的面积,三个节点坐标分别为(xi, yi) (xj, yj) (xm, ym)
+y1 =(xi*(yj-ym) + xj*(ym-yi) + xm*(yi-yj))/2;
+
+end
+
+
+function y2 = Linear_Triangle_Element_Stiffness(E,NU,t,xi,yi,xj,yj,xm,ym,p)
+    %弹性模量为 E、泊松比为 NU、厚度为t 
+    %p=1用于面应力情况 p=2表明函数用于平面应变情况。
+    %该函数返回6X6的单元刚度矩阵。
+    A =(xi*(yj-ym) + xj*(ym-yi) + xm*(yi-yj))/2;
+    betai = yj-ym;
+    betaj = ym-yi;
+    betam = yi-yj;
+    gammai = xm-xj;
+    gammaj = xi-xm;
+    gammam = xj-xi;
+    B = [betai 0 betaj 0 betam 0;
+        0 gammai 0 gammaj 0 gammam;
+        gammai betai gammaj betaj gammam betam]/(2*A);
+    if p == 1
+        D=(E/(1-NU*NU))*[1 NU 0; NU 1 0; 0 0 (1-NU)/2];
+    elseif p == 2
+        D=(E/(1+NU)/(1-2*NU) )*[1-NU NU 0; NU 1-NU 0;0 0 (1-2*NU)/2];
+    end
+    y2 =t*A*B'*D*B;
+end
+
+
+function y3 = Linear_Triangle_Assemble(K,k,i,j,m)
+    %该函数将连接节点 i和节点j的线性三角形元的
+    %单元刚度矩阵k集成到整体刚度矩阵K。
+    %每集成一个单元，该函数都将返 2nX2n 的整体刚度矩阵K。
+
+    K(2*i-1,2*i-1)= K(2*i-1,2*i-1)+ k(1,1);
+    K(2*i-1,2*i)  = K(2*i-1,2*i)  + k(1,2);
+    K(2*i-1,2*j-1)= K(2*i-1,2*j-1)+ k(1,3);
+    K(2*i-1,2*j)  = K(2*i-1,2*j)  + k(1,4);
+    K(2*i-1,2*m-1)= K(2*i-1,2*m-1)+ k(1,5);
+    K(2*i-1,2*m) =  K(2*i-1,2*m)  + k(1,6);
+
+    K(2*i,2*i-1)= K(2*i,2*i-1)+ k(2,1);
+    K(2*i,2*i)  = K(2*i,2*i)  + k(2,2);
+    K(2*i,2*j-1)= K(2*i,2*j-1)+ k(2,3);
+    K(2*i,2*j)  = K(2*i,2*j)  + k(2,4);
+    K(2*i,2*m-1)= K(2*i,2*m-1)+ k(2,5);
+    K(2*i,2*m)  = K(2*i,2*m)  + k(2,6);
+
+    K(2*j-1,2*i-1)= K(2*j-1,2*i-1)+ k(3,1);
+    K(2*j-1,2*i)  = K(2*j-1,2*i)  + k(3,2);
+    K(2*j-1,2*j-1)= K(2*j-1,2*j-1)+ k(3,3);
+    K(2*j-1,2*j)  = K(2*j-1,2*j)  + k(3,4);
+    K(2*j-1,2*m-1)= K(2*j-1,2*m-1)+ k(3,5);
+    K(2*j-1,2*m)  = K(2*j-1,2*m)  + k(3,6);
+
+    K(2*j,2*i-1)= K(2*j,2*i-1)+ k(4,1);
+    K(2*j,2*i)  = K(2*j,2*i)  + k(4,2);
+    K(2*j,2*j-1)= K(2*j,2*j-1)+ k(4,3);
+    K(2*j,2*j)  = K(2*j,2*j)  + k(4,4);
+    K(2*j,2*m-1)= K(2*j,2*m-1)+ k(4,5);
+    K(2*j,2*m)  = K(2*j,2*m)  + k(4,6);
+
+    K(2*m-1,2*i-1)= K(2*m-1,2*i-1)+ k(5,1);
+    K(2*m-1,2*i)  = K(2*m-1,2*i)  + k(5,2);
+    K(2*m-1,2*j-1)= K(2*m-1,2*j-1)+ k(5,3);
+    K(2*m-1,2*j)  = K(2*m-1,2*j)  + k(5,4);
+    K(2*m-1,2*m-1)= K(2*m-1,2*m-1)+ k(5,5);
+    K(2*m-1,2*m)  = K(2*m-1,2*m)  + k(5,6);
+
+    K(2*m,2*i-1)= K(2*m,2*j-1)+ k(6,1);
+    K(2*m,2*i)  = K(2*m,2*i)  + k(6,2);
+    K(2*m,2*j-1)= K(2*m,2*j-1)+ k(6,3);
+    K(2*m,2*j)  = K(2*m,2*j)  + k(6,4);
+    K(2*m,2*m-1)= K(2*m,2*m-1)+ k(6,5);
+    K(2*m,2*m)  = K(2*m,2*m)  + k(6,6);
+    y3=K;
+end
+
+
+function y4 = Linear_Triangle_Element_Stresses(E, NU, xi, yi, xj, yj, xm, ym, p, u)    
+    %该函数计算在LinearTriangleElementStresses(E,NU,t,x; y xp yp xm,ym; p,u)
+    %弹性模量为 E、泊松比为 NU、以及单元位移矢量为u的单元应力。
+    %p=1 用于面应力情况。p=2用于平面应变情况。
+    %该函数返回单元应力矢量。
+    A=Linear_Triangle_Element_Area(xi, yi, xj, yj, xm, ym);
+    %A=(xi*(yj-ym)+ xj*(ym-yi) + xm*(yi-yj))/2;
+    betai = yj-ym;
+    betaj = ym-yi;
+    betam = yi-yj;
+    gammai = xm-xj;
+    gammaj = xi-xm;
+    gammam = xj-xi;
+    B =[betai 0 betaj 0 betam 0;
+        0 gammai 0 gammaj 0 gammam;
+        gammai betai gammaj betaj gammam betam]/(2*A);
+    if p==1
+        D=(E/(1-NU*NU))*[1 NU 0; NU 1 0; 0 0 (1-NU)/2];
+    elseif p == 2
+        D=(E/(1+NU)/(1-2*NU) )*[1-NU NU 0; NU 1-NU 0;0 0 (1-2*NU)/2];
+    end
+    y4=D*B*u;
+end
+        
+
+function y5 = Linear_Triangle_Element_PStresses(sigma)
+    % 该函数根据单元应力矢 sigma 计算 单元主应力。
+    % LinearTriangleElementStresses(sigma)该函数
+    % 返回3X1的矢量,其形式为[sigmal,sigma2,theta]。其中 sigmal 和 sigma2为单元的主应力,
+    % theta 为主应力方向角。
+    R =(sigma(1) + sigma(2))/2;
+    Q =((sigma(1) - sigma(2))/2)^2 + sigma(3)*sigma(3);
+    M = 2*sigma(3)/(sigma(1) - sigma(2));
+    s1= R + sqrt(Q);
+    s2= R - sqrt(Q);
+    theta = (atan(M)/2)*180/pi;
+    y5 =[s1;s2;theta];
+end
+
+
+
+    
+    
+    
