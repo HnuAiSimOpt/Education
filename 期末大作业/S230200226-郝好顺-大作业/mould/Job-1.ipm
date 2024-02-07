@@ -1,0 +1,26 @@
+<?xml version="1.0"?><msgwrapper><Started><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">Job-1</jobName><clientHost type="string">March</clientHost><handle type="integer">0</handle></Started>
+<Warning><message type="string">SLAVE SURFACE ASSEMBLY__PICKEDSET11_CNS_ IS A NODE-BASED SURFACE USED WITH SURFACE TO SURFACE APPROACH.  IN ORDER TO OBTAIN IMPROVED STRESS ACCURACY WITH THIS APPROACH, AN ELEMENT-BASED SURFACE SHOULD BE USED INSTEAD.</message><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">Job-1</jobName></Warning>
+<Warning><message type="string">FOR *TIE PAIR (ASSEMBLY__PICKEDSET11_CNS_-ASSEMBLY__PICKEDSURF10), ADJUSTMENT WAS SPECIFIED BUT NO NODE WAS ADJUSTED MORE THAN THE ADJUSTMENT DISTANCE = 2.22000E-16.</message><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">Job-1</jobName></Warning>
+<Warning><message type="string">NODE SET ASSEMBLY_PART-3-1_PART-3-1-REFPT_ HAS NO MEMBERS AND WILL BE IGNORED.  NODES DEFINED IN THIS SET MAY HAVE BEEN DELETED BECAUSE THEY WERE NOT CONNECTED TO ANY ELEMENTS.</message><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">Job-1</jobName></Warning>
+<Odb_File><file type="string">C:\Temp\Job-1.odb</file><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">Job-1</jobName></Odb_File>
+<Completed><message type="string">Analysis phase complete</message><phase type="symconst">BATCHPRE_PHASE</phase><jobName type="string">Job-1</jobName></Completed>
+<Started><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName><clientHost type="string">March</clientHost><handle type="integer">21028</handle></Started>
+<Step><stepId type="integer">1</stepId><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Step>
+<Odb_Frame><step type="integer">0</step><frame type="integer">0</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Status><step type="integer">1</step><increment type="integer">0</increment><attempts type="integer">1</attempts><severe type="integer">0</severe><equilibrium type="integer">0</equilibrium><iterations type="integer">0</iterations><totalTime type="float">0</totalTime><stepTime type="float">0</stepTime><timeIncrement type="float">1e-36</timeIncrement><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Status>
+<MEMORY_ESTIMATE><memory type="float">52</memory><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></MEMORY_ESTIMATE>
+<MEMORY_ESTIMATE><memory type="float">52</memory><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></MEMORY_ESTIMATE>
+<Odb_Frame><step type="integer">0</step><frame type="integer">1</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">2</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">3</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">4</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">5</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">6</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">7</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">8</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">9</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Odb_Frame><step type="integer">0</step><frame type="integer">10</frame><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Odb_Frame>
+<Status><step type="integer">1</step><increment type="integer">1</increment><attempts type="integer">1</attempts><severe type="integer">0</severe><equilibrium type="integer">0</equilibrium><iterations type="integer">0</iterations><totalTime type="float">0</totalTime><stepTime type="float">1e-36</stepTime><timeIncrement type="float">1e-36</timeIncrement><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Status>
+<End_Step><stepId type="integer">1</stepId><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></End_Step>
+<Completed><message type="string">Analysis phase complete</message><phase type="symconst">STANDARD_PHASE</phase><jobName type="string">Job-1</jobName></Completed>
+<JOB_COMPLETED><jobName type="string">Job-1</jobName><time type="string">Wed Jan 10 15:09:03 2024</time></JOB_COMPLETED></msgwrapper>
