@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function [J]=Jacobain(nnel,dndr,dnds,dndt,X,Y,Z)
 %计算雅可比矩阵
 J=zeros(3,3);
@@ -11,4 +12,19 @@ for i=1:nnel
     J(3,1)=J(3,1)+dndt(i)*X(i);
     J(3,2)=J(3,2)+dndt(i)*Y(i);
     J(3,3)=J(3,3)+dndt(i)*Z(i);
+=======
+function [J]=Jacobain(nnel,dndr,dnds,dndt,X,Y,Z)
+%计算雅可比矩阵
+J=zeros(3,3);
+for i=1:nnel
+    J(1,1)=J(1,1)+dndr(i)*X(i);
+    J(1,2)=J(1,2)+dndr(i)*Y(i);
+    J(1,3)=J(1,3)+dndr(i)*Z(i);
+    J(2,1)=J(2,1)+dnds(i)*X(i);
+    J(2,2)=J(2,2)+dnds(i)*Y(i);
+    J(2,3)=J(2,3)+dnds(i)*Z(i);
+    J(3,1)=J(3,1)+dndt(i)*X(i);
+    J(3,2)=J(3,2)+dndt(i)*Y(i);
+    J(3,3)=J(3,3)+dndt(i)*Z(i);
+>>>>>>> 0c2441c35348cc2cb0d4bfa4f93dc736c7d002fd
 end

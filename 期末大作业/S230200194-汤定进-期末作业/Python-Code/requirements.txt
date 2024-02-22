@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 vtk=9.2.2
 numpy
 traits
 mayavi
+=======
+vtk=9.2.2
+numpy
+traits
+mayavi
+>>>>>>> 0c2441c35348cc2cb0d4bfa4f93dc736c7d002fd
 pyqt5
