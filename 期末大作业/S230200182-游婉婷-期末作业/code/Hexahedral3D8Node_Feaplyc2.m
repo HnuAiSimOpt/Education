@@ -1,0 +1,19 @@
+function [KK,ff]=Hexahedral3D8Node_Feaplyc2(node,K,uni_load)
+num=find(node(:,3)-0<1e-9);  % 将固定面上的节点位移置0
+KK=K;
+ff=uni_load;
+for i=1:size(num,1)
+ r=num(i);
+ KK(3*r-2,:)=0;
+ KK(:,3*r-2)=0;
+ KK(3*r-2,3*r-2)=1;
+ KK(3*r-1,:)=0;
+ KK(:,3*r-1)=0;
+ KK(3*r-1,3*r-1)=1;
+ KK(3*r,:)=0;
+ KK(:,3*r)=0;
+ KK(3*r,3*r)=1;
+ ff(3*r-2)=0;
+ ff(3*r-1)=0;
+ ff(3*r)=0;
+end
