@@ -1,0 +1,5 @@
+vtk=9.2.2
+numpy
+traits
+mayavi
+pyqt5
