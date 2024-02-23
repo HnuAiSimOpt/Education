@@ -1,0 +1,12 @@
+clear;clc;
+E=1.0e10;NU=0.25;lx=0.2;ly=0.8;lz=0.6;
+k1=Hexahedral3D8Node_Stiffness(E,NU,lx,0,0,lx,ly,0,0,ly,0,0,0,0,lx,0,lz,lx,ly,lz,0,ly,lz,0,0,lz);
+KK=zeros(24,24);
+KK=Hexahedral3D8Node_Assembly(KK,k1,1,2,3,4,5,6,7,8);
+k=[KK(4:9,4:9),KK(4:9,16:21);KK(16:21,4:9),KK(16:21,16:21)];
+p=[0;0;0;0;0;0;0;0;-1e5;0;0;-1e5];
+u=k\p
+U=[0;0;0;u(1:6);0;0;0;0;0;0;u(7:12);0;0;0];
+P=KK*U
+u1=U(1:24);
+stress1=Hexahedral3D8Node_Stress(E,NU,lx,0,0,lx,ly,0,0,ly,0,0,0,0,lx,0,lz,lx,ly,lz,0,ly,lz,0,0,lz,u1)
