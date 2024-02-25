@@ -1,0 +1,37 @@
+nelx = 200;          
+nely = 60;             
+x(1:nely,1:nelx)=1;
+[U] = FE(nelx,nely,x);
+disp(U)
+function[KE]=lk
+E=1.;     %弹性模量
+nu=0.3; %泊松比
+k=[1/2-nu/6, 1/8+nu/8, -1/4-nu/12, -1/8+3*nu/8, -1/4+nu/12, -1/8-nu/8, nu/6, 1/8-3*nu/8];
+KE = E/(1-nu^2)*[k(1) k(2) k(3) k(4) k(5) k(6) k(7) k(8); 
+                              k(2) k(1) k(8) k(7) k(6) k(5) k(4) k(3);
+                              k(3) k(8) k(1) k(6) k(7) k(4) k(5) k(2); 
+                              k(4) k(7) k(6) k(1) k(8) k(3) k(2) k(5);
+                              k(5) k(6) k(7) k(8) k(1) k(2) k(3) k(4);
+                              k(6) k(5) k(4) k(3) k(2) k(1) k(8) k(7);
+                              k(7) k(4) k(5) k(2) k(3) k(8) k(1) k(6);
+                              k(8) k(3) k(2) k(5) k(4) k(7) k(6) k(1);];
+end
+function [U]=FE(nelx,nely,x)
+[KE]  = lk;
+K = sparse(2*(nelx+1)*(nely+1),2*(nelx+1)*(nely+1));
+F = sparse(2*(nely+1)*(nelx+1),1);
+U = zeros(2*(nely+1)*(nelx+1),1);
+
+for ely = 1:nely
+    for elx=1:nelx
+        n1 = (nely+1)*(elx-1)+ely;
+        n2 = (nely+1)*elx+ely;
+        edof = [2*n1-1; 2*n1; 2*n2-1; 2*n2; 2*n2+1; 2*n2+2;2*n1+1;2*n1+2];
+        K(edof,edof)=K(edof,edof)+x(ely,elx)*KE;
+    end
+end
+F(2*(nelx/2+1)*(nely+1),1)=1;
+alldofs = [1:2*(nely+1)*(nelx+1)];
+U=K(alldofs,alldofs)\F(alldofs,:  );
+
+end
