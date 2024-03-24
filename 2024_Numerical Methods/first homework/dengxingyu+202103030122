@@ -1,0 +1,30 @@
+#邓兴宇 202103030122 机械车辆2102班
+import numpy
+import matplotlib
+from matplotlib import pyplot
+x=[2,4,6]
+y=[2,9,3]
+def lagrange_interploate(x1):
+    P=[]
+    L_n=0
+    for i in range(len(x)):
+        numerator=1
+        denominator=1 
+        for j in range(len(x)):
+            if j!=i:
+                numerator*=(x1-x[j])
+                denominator*=(x[i]-x[j])
+        P.append(numerator/denominator)
+    
+    for i in range(len(x)):
+        L_n+=y[i]*P[i]
+        
+    return round(L_n,3)
+    
+print(lagrange_interploate(8))
+x2=numpy.linspace(-10,10,20,endpoint=False)
+print(x2)
+y2=[]
+for i in range(len(x2)):
+    y2.append(lagrange_interploate(x2[i]))
+print(y2)
