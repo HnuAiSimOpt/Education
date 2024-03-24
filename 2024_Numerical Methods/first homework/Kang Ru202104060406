@@ -1,0 +1,27 @@
+%康茹 202104060406
+function[y]=lagrange(x0,y0,x)
+%建立一个函数名为lagrange的函数，输入x0,y0为插值点的坐标，均为数组，x为要求的点的横坐标，此处为一个数组，长度为n，表示一次可以求n个点。
+N=length(x0);
+n=length(x);
+y=zeros(1,n);
+for k=1:n
+%对n个待求点循环
+    l=ones(N);
+for i=1:N 
+%对每个插值点循环
+for j=1:N 
+%计算基函数
+        if(j~=i)
+            l(i)=l(i)*(x(k)-x0(j))/(x0(i)-x0(j));
+        end
+    end
+y(k)=y(k)+y0(i)*l(i);  
+%计算拉格朗日插值函数
+end
+end
+scatter(x0,y0,'r','*'); 
+%画出插值点的图
+hold on 
+plot(x,y,’b’)
+%画出插值函数的图
+end
