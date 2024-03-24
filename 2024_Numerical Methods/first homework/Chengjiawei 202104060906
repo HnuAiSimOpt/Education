@@ -1,0 +1,30 @@
+#车辆2102 成家伟 202104060906
+ 
+import numpy as np
+    #定义拉格朗日插值函数
+def lagrange_Interpolation(x,y,x1):
+    # x: 已知数据点
+    # y: 已知数据点对应的函数值
+    # x1: 需要插值的新数据点
+    P = []
+    L_n = 0
+    for i in range(len(x)):
+        numerator=1  #分子初始化
+        denominator=1  #分母初始化
+        for j in range(len(x)):
+            if j!=i:
+                numerator*=(x1-x[j])
+                denominator*=(x[i]-x[j])
+
+        P.append(numerator/denominator)
+
+    for i in range(len(y)):
+        L_n+=y[i]*P[i]
+    return round(L_n,3)  #保留3位小数
+
+#实例
+x = [1, 3, 5]
+y = [2, 10, 1]
+x1 = 10
+yi = lagrange_Interpolation(x,y,x1)  
+print(f"在x={x1}处的插值结果为: y={yi}")
