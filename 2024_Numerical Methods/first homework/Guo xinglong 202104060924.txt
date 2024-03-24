@@ -1,0 +1,20 @@
+#郭兴隆 202104060924 车辆2102 
+
+def lagrange(x,y,test_x):
+    lens=len(y)
+    test_y=0
+    for i in range(lens):
+        sum_y=y[i]
+        for j in range(lens):
+            if i!=j:
+                sum_y*=(test_x-x[j])/(x[i]-x[j])
+        test_y+=sum_y
+    return test_y
+
+import random
+x=sorted(random.sample(range(1,20),10))
+y=random.sample(range(1,20),10)
+test_x=eval(input("please input \ntest_x="))
+test_y=lagrange(x, y, test_x)
+print("test_y=",test_y)
+
