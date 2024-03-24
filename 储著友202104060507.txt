@@ -1,0 +1,32 @@
+#include <stdio.h>
+
+double lagrange_interpolation(double x[], double y[], int n) {
+    double result = 0;
+    for (int i = 0; i < n; i++) {
+        double l = 1;
+        for (int j = 0; j < n; j++) {
+            if (i != j) {
+                l *= (x[i] - x[j]) / (x[i] - x[j]);
+            }
+        }
+        result += y[i] * l;
+    }
+    return result;
+}
+
+int main() {
+    int num_points;
+    printf("请输入点数: ");
+    scanf("%d", &num_points);
+
+    double x[num_points], y[num_points];
+    for (int i = 0; i < num_points; i++) {
+        printf("请输入第%d个点的坐标(x, y): ", i + 1);
+        scanf("%lf %lf", &x[i], &y[i]);
+    }
+
+    double result = lagrange_interpolation(x, y, num_points);
+    printf("拉格朗日差值为: %lfn", result);
+
+    return 0;
+}
