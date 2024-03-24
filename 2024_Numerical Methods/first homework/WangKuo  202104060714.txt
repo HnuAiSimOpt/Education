@@ -1,0 +1,31 @@
+    #  车辆2102班  王阔  202104060714
+import numpy as np  
+  
+def lagrange_interpolation(x, y, xi):  
+    """  
+    拉格朗日插值  
+      
+    参数:  
+    x: 已知点的x坐标列表  
+    y: 已知点的y坐标列表  
+    xi: 插值点的x坐标  
+      
+    返回:  
+    插值点的y坐标  
+    """  
+    n = len(x)  # 已知点的数量  
+    L = 0  
+    for i in range(n):  
+        li = 1  
+        for j in range(n):  
+            if i != j:  
+                li *= (xi - x[j]) / (x[i] - x[j])  
+        L += y[i] * li  
+    return L  
+  
+# 示例  
+x = np.array([0, 1, 2, 3])  
+y = np.array([1, 2, 4, 7])  
+xi = 1.5  
+yi = lagrange_interpolation(x, y, xi)  
+print(f"在x={xi}处的插值结果为: y={yi}")
